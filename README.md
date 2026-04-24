@@ -1,7 +1,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximal-scale=1:0, viewport-fit=cover, user-scalable=yes">
     <title>Data Konsumable</title>
     <style>
         * {
@@ -213,7 +213,7 @@
         }
 
         /* footer & responsive android */
-        @media (max-width: 600px) {
+        @media (max-width: 320x) {
             body {
                 padding: 10px;
             }
@@ -241,8 +241,8 @@
             }
         }
 
-        /* Landscape mode: lebih rapat, tabel lebih lega */
-        @media (min-width: 360px) and (orientation: landscape) {
+        /* Landscape mode: lebih rapat*/
+        @media (min-width: 320px) and (orientation: landscape) {
             .form-row {
                 flex-wrap: nowrap;
             }
