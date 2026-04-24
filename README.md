@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Smart Stock - Total Per Barang</title>
+    <title>Smart Stock - Manajemen Masuk & Keluar</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +20,7 @@
         }
 
         .app-container {
-            max-width: 600px;
+            max-width: 1300px;
             margin: 0 auto;
             background: white;
             border-radius: 32px;
@@ -47,13 +47,47 @@
             align-items: center;
             gap: 8px;
         }
-        .global-total {
+        .global-stock {
             background: #e9f4e8;
             padding: 6px 14px;
             border-radius: 40px;
             font-size: 0.8rem;
             font-weight: 600;
             color: #2b6e3c;
+        }
+
+        /* Tab Menu */
+        .tab-menu {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0 20px 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        .tab-btn {
+            background: transparent;
+            color: #5b6e8c;
+            border: none;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 40px;
+            width: auto;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: #2c7a4d;
+            color: white;
+            box-shadow: 0 2px 8px rgba(44,122,77,0.3);
+        }
+        .tab-btn:active {
+            transform: scale(0.98);
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active-pane {
+            display: block;
         }
 
         .form-card {
@@ -63,8 +97,16 @@
             margin: 16px 0 20px 0;
             border: 1px solid #e2e8f0;
         }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
         .form-group {
-            margin-bottom: 14px;
+            flex: 1;
+            min-width: 140px;
+            margin-bottom: 0;
         }
         .form-group label {
             display: block;
@@ -75,174 +117,81 @@
             color: #5b6e8c;
             margin-bottom: 5px;
         }
-        .form-group input,
-        .form-group select {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 12px 14px;
-            font-size: 0.95rem;
+            padding: 10px 12px;
+            font-size: 0.9rem;
             border: 1px solid #cbd5e1;
             border-radius: 18px;
             background: white;
-            transition: all 0.2s;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #2c7a4d;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(44,122,77,0.15);
-        }
-        .double-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .double-row .form-group {
-            flex: 1;
-            min-width: 120px;
         }
         button {
             background: #2c7a4d;
             border: none;
             color: white;
             font-weight: 600;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 40px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s;
-            width: 100%;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
         button:active {
             transform: scale(0.97);
-        }
-
-        .action-bar {
-            background: white;
-            border-radius: 28px;
-            padding: 12px 16px;
-            margin: 16px 0;
-            border: 1px solid #e9edf2;
-        }
-        .search-section {
-            margin-bottom: 12px;
-        }
-        .search-section input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 40px;
-            border: 1px solid #cbd5e1;
-            font-size: 0.9rem;
-            background: #f8fafc;
-        }
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 12px 0;
-            padding: 8px 0;
-            border-top: 1px solid #eef2f6;
-            border-bottom: 1px solid #eef2f6;
-        }
-        .total-filter {
-            font-weight: 700;
-            background: #eef2ff;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        .btn-group button {
-            flex: 1;
-            padding: 10px 12px;
-            font-size: 0.8rem;
         }
         .btn-outline {
             background: white;
             border: 1px solid #cbd5e1;
             color: #1e293b;
         }
-        .btn-outline:active {
-            background: #f1f5f9;
-        }
         .btn-danger {
             background: #dc2626;
         }
-
-        /* Ringkasan Total per Barang */
-        .summary-card {
-            background: #fefce8;
-            border-radius: 20px;
-            padding: 14px 16px;
-            margin: 12px 0 8px 0;
-            border: 1px solid #fde047;
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.75rem;
         }
-        .summary-title {
-            font-weight: 800;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #854d0e;
+
+        /* Tabel Stok Akhir per Barang */
+        .stock-summary {
+            background: #f0fdf4;
+            border-radius: 20px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #bbf7d0;
+        }
+        .stock-summary h3 {
+            font-size: 1rem;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #166534;
         }
-        .summary-items {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 220px;
-            overflow-y: auto;
+        .summary-table-wrapper {
+            overflow-x: auto;
         }
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 8px 12px;
-            border-radius: 40px;
-            border-left: 4px solid #eab308;
-            font-size: 0.85rem;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .item-name {
-            font-weight: 700;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .item-total {
-            font-weight: 800;
-            background: #f1f5f9;
-            padding: 4px 10px;
-            border-radius: 30px;
-            color: #2c7a4d;
+        .summary-stock-table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 0.85rem;
         }
-        .badge-unit-sum {
-            background: #e2eaf1;
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 0.65rem;
-            font-weight: normal;
-        }
-        .empty-summary {
+        .summary-stock-table th {
+            background: #dcfce7;
+            padding: 10px;
             text-align: center;
-            color: #94a3b8;
-            padding: 20px;
-            font-style: italic;
+        }
+        .summary-stock-table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .stock-available {
+            font-weight: 700;
+            color: #15803d;
         }
 
+        /* Tabel Riwayat Masuk (Hijau) dan Keluar (Merah) */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 20px;
@@ -254,72 +203,88 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.8rem;
-            min-width: 560px;
+            min-width: 500px;
         }
         th {
             background: #eef2f9;
             padding: 12px 8px;
             font-weight: 700;
-            color: #1f3a3f;
             text-align: center;
-            border-bottom: 1px solid #dce3ec;
         }
         td {
             padding: 10px 6px;
             text-align: center;
             border-bottom: 1px solid #f0f4f9;
         }
+        .row-masuk {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+        }
+        .row-keluar {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
         .delete-btn {
             background: none;
             border: none;
-            font-size: 1.2rem;
-            padding: 5px 10px;
+            font-size: 1.1rem;
             cursor: pointer;
             color: #b45309;
             width: auto;
-        }
-        .delete-btn:active {
-            background: #fee2e2;
-            border-radius: 30px;
+            padding: 4px 8px;
         }
         .empty-row td {
             text-align: center;
             padding: 40px;
             color: #94a3b8;
         }
-        .badge-unit {
-            background: #e2eaf1;
-            padding: 3px 8px;
+        .badge {
+            padding: 3px 10px;
             border-radius: 30px;
             font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-masuk {
+            background: #22c55e20;
+            color: #166534;
+        }
+        .badge-keluar {
+            background: #ef444420;
+            color: #b91c1c;
         }
 
+        .action-bar {
+            background: white;
+            border-radius: 28px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border: 1px solid #e9edf2;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .search-section input {
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+            width: 220px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
         .footer-note {
             font-size: 0.65rem;
             color: #6b7280;
             text-align: center;
             margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px solid #eef2f6;
         }
-
         @media print {
-            .no-print, .form-card, .action-bar, .btn-group, .delete-btn, .summary-card {
-                display: none !important;
-            }
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
-            .app-container {
-                max-width: 100%;
-                padding: 0;
-                box-shadow: none;
-            }
-            table {
-                border: 1px solid #ccc;
-            }
+            .no-print { display: none; }
+            body { background: white; }
         }
     </style>
 </head>
@@ -327,253 +292,355 @@
 <div class="app-container">
     <div class="header">
         <h1>📦 Smart Stock</h1>
-        <span class="global-total" id="globalTotal">Total: 0</span>
+        <span class="global-stock" id="globalStockValue">Total Stok: 0</span>
     </div>
 
-    <!-- Form Input -->
-    <div class="form-card no-print">
-        <div class="form-group">
-            <label>📅 Tanggal</label>
-            <input type="date" id="tanggalInput">
-        </div>
-        <div class="form-group">
-            <label>👤 Nama PIC</label>
-            <input type="text" id="namaInput" placeholder="Masukkan nama..." maxlength="50">
-        </div>
-        <div class="form-group">
-            <label>📦 Nama Barang</label>
-            <input type="text" id="barangInput" placeholder="Contoh: Plastik, Magnet, dll" maxlength="60">
-        </div>
-        <div class="double-row">
-            <div class="form-group">
-                <label>🔢 Quantity</label>
-                <input type="number" id="qtyInput" value="-" min="1" step="1">
+    <!-- Tab Menu -->
+    <div class="tab-menu no-print">
+        <button class="tab-btn active" data-tab="masuk">📥 Barang Masuk</button>
+        <button class="tab-btn" data-tab="keluar">📤 Barang Keluar</button>
+    </div>
+
+    <!-- Panel Barang Masuk (Hijau) -->
+    <div id="tabMasuk" class="tab-pane active-pane">
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>📅 Tanggal Masuk</label>
+                    <input type="date" id="tanggalMasuk">
+                </div>
+                <div class="form-group">
+                    <label>📦 Nama Barang</label>
+                    <input type="text" id="namaBarangMasuk" placeholder="Nama barang">
+                </div>
+                <div class="form-group">
+                    <label>🔢 Jumlah Masuk</label>
+                    <input type="number" id="jumlahMasuk" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>📏 Satuan</label>
+                    <input type="text" id="satuanMasuk" placeholder="pcs, kg, box">
+                </div>
+                <div class="form-group">
+                    <label>👤 PIC</label>
+                    <input type="text" id="picMasuk" placeholder="Nama">
+                </div>
+                <button id="btnTambahMasuk">+ Tambah Masuk</button>
             </div>
-            <div class="form-group">
-                <label>📏 Satuan</label>
-                <input type="text" id="unitInput" placeholder="pcs, box, kg" maxlength="20">
+        </div>
+    </div>
+
+    <!-- Panel Barang Keluar (Merah) -->
+    <div id="tabKeluar" class="tab-pane">
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>📅 Tanggal Keluar</label>
+                    <input type="date" id="tanggalKeluar">
+                </div>
+                <div class="form-group">
+                    <label>📦 Nama Barang</label>
+                    <input type="text" id="namaBarangKeluar" placeholder="Nama barang">
+                </div>
+                <div class="form-group">
+                    <label>🔢 Jumlah Keluar</label>
+                    <input type="number" id="jumlahKeluar" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>📏 Satuan</label>
+                    <input type="text" id="satuanKeluar" placeholder="pcs, kg, box">
+                </div>
+                <div class="form-group">
+                    <label>👤 PIC</label>
+                    <input type="text" id="picKeluar" placeholder="Nama">
+                </div>
+                <button id="btnTambahKeluar" style="background:#dc2626;">- Tambah Keluar</button>
             </div>
         </div>
-        <div class="form-group">
-            <label>✏️ Keterangan</label>
-            <input type="text" id="keteranganInput" placeholder="Opsional" maxlength="80">
-        </div>
-        <button id="btnTambah">Tambah Data</button>
     </div>
 
-    <!-- Ringkasan Total Per Nama Barang (Nilai Akumulasi) -->
-    <div class="summary-card no-print" id="summaryCard">
-        <div class="summary-title">
-            🧾 TOTAL STOK PER NAMA BARANG
-        </div>
-        <div id="summaryContainer" class="summary-items">
-            <!-- dynamic summary berdasarkan data -->
-            <div class="empty-summary">Belum ada data</div>
+    <!-- Tabel Stok Akhir per Nama Barang (Hasil Akumulasi) -->
+    <div class="stock-summary no-print">
+        <h3>📊 STOCK AKHIR PER NAMA BARANG (Masuk - Keluar)</h3>
+        <div class="summary-table-wrapper">
+            <table class="summary-stock-table" id="stockSummaryTable">
+                <thead>
+                    <tr><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Tersedia</th><th>Satuan</th></tr>
+                </thead>
+                <tbody id="stockSummaryBody">
+                    <tr><td colspan="5" style="text-align:center;">Belum ada data</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Action & Search -->
+    <!-- Riwayat Transaksi (Gabungan Masuk & Keluar + Search) -->
     <div class="action-bar no-print">
         <div class="search-section">
-            <input type="text" id="searchInput" placeholder="🔍 Cari nama barang...">
-        </div>
-        <div class="stats-row">
-            <span>📊 Hasil filter:</span>
-            <span class="total-filter" id="filterTotalDisplay">Total: 0</span>
+            <input type="text" id="searchRiwayat" placeholder="🔍 Cari nama barang...">
         </div>
         <div class="btn-group">
             <button id="printBtn" class="btn-outline">🖨️ Print</button>
-            <button id="downloadBtn" class="btn-outline">📁 CSV</button>
-            <button id="resetBtn" class="btn-danger">🗑️ Reset Semua</button>
+            <button id="exportExcelBtn" class="btn-outline">📊 Export Excel</button>
+            <button id="resetAllBtn" class="btn-danger">🗑️ Reset Semua</button>
         </div>
     </div>
 
-    <!-- Tabel Data -->
     <div class="table-wrapper">
-        <table id="dataTable">
+        <table id="riwayatTable">
             <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>PIC</th>
-                    <th>Nama Barang</th>
-                    <th>Qty</th>
-                    <th>Satuan</th>
-                    <th>Keterangan</th>
-                    <th class="no-print">Aksi</th>
-                </tr>
+                <tr><th>Tanggal</th><th>Tipe</th><th>Nama Barang</th><th>Jumlah</th><th>Satuan</th><th>PIC</th><th class="no-print">Aksi</th></tr>
             </thead>
-            <tbody id="tableBody">
-                <tr class="empty-row"><td colspan="7">📭 Belum ada data. Silakan tambah barang.</td></tr>
+            <tbody id="riwayatBody">
+                <tr class="empty-row"><td colspan="7">📭 Belum ada transaksi</td></tr>
             </tbody>
         </table>
     </div>
-
-    <div class="footer-note no-print">
-        ⚡ Fitur: Total otomatis per Nama Barang (akumulasi quantity) • Data tersimpan lokal
-    </div>
+    <div class="footer-note no-print">✅ Stok akhir = Total Masuk - Total Keluar per barang | Data tersimpan otomatis</div>
 </div>
 
 <script>
     // ======================== DATA STORAGE ========================
-    let stockData = [];
+    let transactions = []; // { id, tanggal, tipe, barang, jumlah, satuan, pic }
     let nextId = 1;
 
     // DOM Elements
-    const tanggalInput = document.getElementById('tanggalInput');
-    const namaInput = document.getElementById('namaInput');
-    const barangInput = document.getElementById('barangInput');
-    const qtyInput = document.getElementById('qtyInput');
-    const unitInput = document.getElementById('unitInput');
-    const keteranganInput = document.getElementById('keteranganInput');
-    const btnTambah = document.getElementById('btnTambah');
-    const searchInput = document.getElementById('searchInput');
-    const tableBody = document.getElementById('tableBody');
-    const filterTotalDisplay = document.getElementById('filterTotalDisplay');
-    const globalTotalSpan = document.getElementById('globalTotal');
-    const printBtn = document.getElementById('printBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const summaryContainer = document.getElementById('summaryContainer');
+    const tanggalMasuk = document.getElementById('tanggalMasuk');
+    const namaBarangMasuk = document.getElementById('namaBarangMasuk');
+    const jumlahMasuk = document.getElementById('jumlahMasuk');
+    const satuanMasuk = document.getElementById('satuanMasuk');
+    const picMasuk = document.getElementById('picMasuk');
+    const btnTambahMasuk = document.getElementById('btnTambahMasuk');
 
-    // Helper: Escape HTML
+    const tanggalKeluar = document.getElementById('tanggalKeluar');
+    const namaBarangKeluar = document.getElementById('namaBarangKeluar');
+    const jumlahKeluar = document.getElementById('jumlahKeluar');
+    const satuanKeluar = document.getElementById('satuanKeluar');
+    const picKeluar = document.getElementById('picKeluar');
+    const btnTambahKeluar = document.getElementById('btnTambahKeluar');
+
+    const searchRiwayat = document.getElementById('searchRiwayat');
+    const riwayatBody = document.getElementById('riwayatBody');
+    const stockSummaryBody = document.getElementById('stockSummaryBody');
+    const globalStockValue = document.getElementById('globalStockValue');
+    const printBtn = document.getElementById('printBtn');
+    const exportExcelBtn = document.getElementById('exportExcelBtn');
+    const resetAllBtn = document.getElementById('resetAllBtn');
+
+    // Tab handling
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabMasuk = document.getElementById('tabMasuk');
+    const tabKeluar = document.getElementById('tabKeluar');
+
+    // Helper: Set default date
+    function setDefaultDates() {
+        const today = new Date().toISOString().slice(0,10);
+        if (!tanggalMasuk.value) tanggalMasuk.value = today;
+        if (!tanggalKeluar.value) tanggalKeluar.value = today;
+    }
+
+    // Helper Escape HTML
     function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
     }
 
-    // Set default tanggal hari ini
-    function setDefaultDate() {
-        if (!tanggalInput.value) {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            tanggalInput.value = `${yyyy}-${mm}-${dd}`;
-        }
-    }
-
-    // ========== FUNGSI UTAMA: Hitung total per nama barang ==========
-    function getSummaryPerItem() {
-        const summaryMap = new Map(); // key: nama_barang|satuan -> { totalQty, unit }
-        for (const item of stockData) {
-            const key = `${item.barang.toLowerCase()}|${item.unit}`;
-            if (summaryMap.has(key)) {
-                const existing = summaryMap.get(key);
-                existing.totalQty += item.quantity;
-            } else {
-                summaryMap.set(key, {
-                    namaBarang: item.barang,
-                    unit: item.unit,
-                    totalQty: item.quantity
-                });
+    // Hitung Stok Akhir per Barang
+    function getStockSummary() {
+        const map = new Map(); // key: barang|satuan -> {masuk, keluar, satuan, barang}
+        for (const trx of transactions) {
+            const key = `${trx.barang.toLowerCase()}|${trx.satuan}`;
+            if (!map.has(key)) {
+                map.set(key, { barang: trx.barang, satuan: trx.satuan, totalMasuk: 0, totalKeluar: 0 });
+            }
+            const data = map.get(key);
+            if (trx.tipe === 'masuk') {
+                data.totalMasuk += trx.jumlah;
+            } else if (trx.tipe === 'keluar') {
+                data.totalKeluar += trx.jumlah;
             }
         }
-        // Konversi ke array dan urutkan berdasarkan nama barang
-        const summaryArray = Array.from(summaryMap.values());
-        summaryArray.sort((a,b) => a.namaBarang.localeCompare(b.namaBarang, 'id'));
-        return summaryArray;
+        const summary = Array.from(map.values()).map(item => ({
+            ...item,
+            stokAkhir: item.totalMasuk - item.totalKeluar
+        }));
+        summary.sort((a,b) => a.barang.localeCompare(b.barang, 'id'));
+        return summary;
     }
 
-    // Render card ringkasan total per barang (akumulasi dari semua data, tanpa filter)
-    function renderSummary() {
-        const summary = getSummaryPerItem();
+    // Render Tabel Stok Akhir
+    function renderStockSummary() {
+        const summary = getStockSummary();
         if (summary.length === 0) {
-            summaryContainer.innerHTML = '<div class="empty-summary">📭 Belum ada data</div>';
+            stockSummaryBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada data</td></tr>';
+            globalStockValue.innerText = `Total Stok: 0`;
             return;
         }
         let html = '';
+        let totalSemuaStok = 0;
         for (const item of summary) {
-            html += `
-                <div class="summary-item">
-                    <div class="item-name">
-                        📦 ${escapeHtml(item.namaBarang)}
-                        <span class="badge-unit-sum">${escapeHtml(item.unit)}</span>
-                    </div>
-                    <div class="item-total">
-                        ${item.totalQty} <span style="font-weight:normal;">${escapeHtml(item.unit)}</span>
-                    </div>
-                </div>
-            `;
+            totalSemuaStok += item.stokAkhir;
+            html += `<tr>
+                        <td><strong>${escapeHtml(item.barang)}</strong></td>
+                        <td>${item.totalMasuk}</td>
+                        <td>${item.totalKeluar}</td>
+                        <td class="stock-available">${item.stokAkhir}</td>
+                        <td>${escapeHtml(item.satuan)}</td>
+                     </tr>`;
         }
-        summaryContainer.innerHTML = html;
+        stockSummaryBody.innerHTML = html;
+        globalStockValue.innerText = `Total Stok: ${totalSemuaStok}`;
     }
 
-    // Render tabel dengan filter (search berdasarkan nama barang)
-    function renderTable() {
-        const keyword = searchInput.value.trim().toLowerCase();
-        let filteredData = stockData;
+    // Render Riwayat Transaksi dengan filter
+    function renderRiwayat() {
+        const keyword = searchRiwayat.value.trim().toLowerCase();
+        let filtered = transactions;
         if (keyword !== "") {
-            filteredData = stockData.filter(item => item.barang.toLowerCase().includes(keyword));
+            filtered = transactions.filter(t => t.barang.toLowerCase().includes(keyword));
         }
-
-        // Hitung total quantity filter
-        let filterTotalQty = 0;
-        filteredData.forEach(item => { filterTotalQty += item.quantity; });
-        filterTotalDisplay.innerText = `Total: ${filterTotalQty}`;
-
-        // Hitung global total (semua data)
-        let globalTotalQty = 0;
-        stockData.forEach(item => { globalTotalQty += item.quantity; });
-        globalTotalSpan.innerText = `Total: ${globalTotalQty}`;
-
-        if (filteredData.length === 0) {
-            tableBody.innerHTML = `<tr class="empty-row"><td colspan="7">🔍 Tidak ada data / kosong</td></tr>`;
+        if (filtered.length === 0) {
+            riwayatBody.innerHTML = '<tr class="empty-row"><td colspan="7">🔍 Tidak ada transaksi</td></tr>';
             return;
         }
-
         let html = '';
-        filteredData.forEach(item => {
-            html += `
-                <tr>
-                    <td>${escapeHtml(item.tanggal)}</td>
-                    <td>${escapeHtml(item.nama)}</td>
-                    <td style="font-weight:500;">${escapeHtml(item.barang)}</td>
-                    <td><strong>${item.quantity}</strong></td>
-                    <td><span class="badge-unit">${escapeHtml(item.unit)}</span></td>
-                    <td>${escapeHtml(item.keterangan) || '-'}</td>
-                    <td class="no-print">
-                        <button class="delete-btn" data-id="${item.id}" title="Hapus">🗑️</button>
-                    </td>
-                </tr>
-            `;
-        });
-        tableBody.innerHTML = html;
-
-        // Re-attach event delete
+        for (const trx of filtered) {
+            const rowClass = trx.tipe === 'masuk' ? 'row-masuk' : 'row-keluar';
+            const tipeBadge = trx.tipe === 'masuk' ? '<span class="badge badge-masuk">📥 MASUK</span>' : '<span class="badge badge-keluar">📤 KELUAR</span>';
+            html += `<tr class="${rowClass}">
+                        <td>${escapeHtml(trx.tanggal)}</td>
+                        <td>${tipeBadge}</td>
+                        <td><strong>${escapeHtml(trx.barang)}</strong></td>
+                        <td>${trx.jumlah}</td>
+                        <td>${escapeHtml(trx.satuan)}</td>
+                        <td>${escapeHtml(trx.pic)}</td>
+                        <td class="no-print"><button class="delete-btn" data-id="${trx.id}" title="Hapus">🗑️</button></td>
+                     </tr>`;
+        }
+        riwayatBody.innerHTML = html;
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = parseInt(btn.getAttribute('data-id'));
-                deleteById(id);
+                deleteTransaction(id);
             });
         });
     }
 
-    // Hapus data berdasarkan ID
-    function deleteById(id) {
-        if (confirm("⚠️ Yakin ingin menghapus data ini?")) {
-            stockData = stockData.filter(item => item.id !== id);
-            if (stockData.length === 0) {
-                nextId = 1;
-            } else {
-                const maxId = stockData.reduce((max, item) => Math.max(max, item.id), 0);
-                if (nextId <= maxId) nextId = maxId + 1;
+    function deleteTransaction(id) {
+        if (confirm("Hapus transaksi ini?")) {
+            transactions = transactions.filter(t => t.id !== id);
+            if (transactions.length === 0) nextId = 1;
+            else {
+                const maxId = Math.max(...transactions.map(t=>t.id),0);
+                if (nextId <= maxId) nextId = maxId+1;
             }
-            renderTable();
-            renderSummary();     // Update ringkasan total per barang
             saveToLocal();
-            showToast("Data berhasil dihapus", "success");
+            renderAll();
+            showToast("Transaksi dihapus", "success");
         }
     }
 
-    // Notifikasi singkat
-    function showToast(message, type = "info") {
+    // Tambah Transaksi Masuk
+    function addMasuk() {
+        const tanggal = tanggalMasuk.value.trim();
+        const barang = namaBarangMasuk.value.trim();
+        let jumlah = parseInt(jumlahMasuk.value);
+        const satuan = satuanMasuk.value.trim();
+        const pic = picMasuk.value.trim();
+
+        if (!tanggal) { showToast("Tanggal harus diisi", "info"); return; }
+        if (!barang) { showToast("Nama barang harus diisi", "info"); return; }
+        if (isNaN(jumlah) || jumlah <= 0) { showToast("Jumlah harus > 0", "info"); return; }
+        if (!satuan) { showToast("Satuan harus diisi", "info"); return; }
+        if (!pic) { showToast("Nama PIC harus diisi", "info"); return; }
+
+        const newTrx = {
+            id: nextId++,
+            tanggal: tanggal,
+            tipe: 'masuk',
+            barang: barang,
+            jumlah: jumlah,
+            satuan: satuan,
+            pic: pic
+        };
+        transactions.push(newTrx);
+        resetFormMasuk();
+        saveToLocal();
+        renderAll();
+        showToast("✅ Barang Masuk ditambahkan", "success");
+    }
+
+    // Tambah Transaksi Keluar (dengan validasi stok cukup)
+    function addKeluar() {
+        const tanggal = tanggalKeluar.value.trim();
+        const barang = namaBarangKeluar.value.trim();
+        let jumlah = parseInt(jumlahKeluar.value);
+        const satuan = satuanKeluar.value.trim();
+        const pic = picKeluar.value.trim();
+
+        if (!tanggal) { showToast("Tanggal harus diisi", "info"); return; }
+        if (!barang) { showToast("Nama barang harus diisi", "info"); return; }
+        if (isNaN(jumlah) || jumlah <= 0) { showToast("Jumlah harus > 0", "info"); return; }
+        if (!satuan) { showToast("Satuan harus diisi", "info"); return; }
+        if (!pic) { showToast("Nama PIC harus diisi", "info"); return; }
+
+        // Hitung stok tersedia untuk barang & satuan tsb
+        let stokTersedia = 0;
+        for (const trx of transactions) {
+            if (trx.barang.toLowerCase() === barang.toLowerCase() && trx.satuan.toLowerCase() === satuan.toLowerCase()) {
+                if (trx.tipe === 'masuk') stokTersedia += trx.jumlah;
+                else if (trx.tipe === 'keluar') stokTersedia -= trx.jumlah;
+            }
+        }
+        if (stokTersedia < jumlah) {
+            showToast(`⚠️ Stok ${barang} (${satuan}) tidak mencukupi! Tersedia: ${stokTersedia}`, "info");
+            return;
+        }
+
+        const newTrx = {
+            id: nextId++,
+            tanggal: tanggal,
+            tipe: 'keluar',
+            barang: barang,
+            jumlah: jumlah,
+            satuan: satuan,
+            pic: pic
+        };
+        transactions.push(newTrx);
+        resetFormKeluar();
+        saveToLocal();
+        renderAll();
+        showToast("📤 Barang Keluar dicatat", "success");
+    }
+
+    function resetFormMasuk() {
+        const today = new Date().toISOString().slice(0,10);
+        tanggalMasuk.value = today;
+        namaBarangMasuk.value = '';
+        jumlahMasuk.value = '1';
+        satuanMasuk.value = '';
+        picMasuk.value = '';
+        namaBarangMasuk.focus();
+    }
+
+    function resetFormKeluar() {
+        const today = new Date().toISOString().slice(0,10);
+        tanggalKeluar.value = today;
+        namaBarangKeluar.value = '';
+        jumlahKeluar.value = '1';
+        satuanKeluar.value = '';
+        picKeluar.value = '';
+        namaBarangKeluar.focus();
+    }
+
+    function renderAll() {
+        renderStockSummary();
+        renderRiwayat();
+    }
+
+    function showToast(msg, type) {
         const toast = document.createElement('div');
-        toast.innerText = message;
+        toast.innerText = msg;
         toast.style.position = 'fixed';
         toast.style.bottom = '20px';
         toast.style.left = '50%';
@@ -583,10 +650,7 @@
         toast.style.padding = '10px 20px';
         toast.style.borderRadius = '40px';
         toast.style.fontSize = '0.85rem';
-        toast.style.fontWeight = '500';
         toast.style.zIndex = '9999';
-        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-        toast.style.whiteSpace = 'nowrap';
         document.body.appendChild(toast);
         setTimeout(() => {
             toast.style.opacity = '0';
@@ -594,255 +658,144 @@
         }, 2000);
     }
 
-    // Tambah transaksi baru
-    function addTransaction() {
-        const tanggal = tanggalInput.value.trim();
-        const nama = namaInput.value.trim();
-        const barang = barangInput.value.trim();
-        let quantity = parseInt(qtyInput.value);
-        const unit = unitInput.value.trim();
-        const keterangan = keteranganInput.value.trim();
-
-        if (!tanggal) { showToast("Tanggal wajib diisi!", "info"); return; }
-        if (!nama) { showToast("Nama PIC harus diisi!", "info"); return; }
-        if (!barang) { showToast("Nama barang harus diisi!", "info"); return; }
-        if (isNaN(quantity) || quantity <= 0) { showToast("Quantity harus angka > 0", "info"); return; }
-        if (!unit) { showToast("Satuan harus diisi!", "info"); return; }
-
-        const newItem = {
-            id: nextId++,
-            tanggal: tanggal,
-            nama: nama,
-            barang: barang,
-            quantity: quantity,
-            unit: unit,
-            keterangan: keterangan || ""
-        };
-        stockData.push(newItem);
-        
-        resetForm();
-        renderTable();
-        renderSummary();   // Update ringkasan total per barang
-        saveToLocal();
-        showToast("✅ berhasil ditambahkan!", "success");
-    }
-
-    // Reset form input
-    function resetForm() {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
-        tanggalInput.value = `${yyyy}-${mm}-${dd}`;
-        namaInput.value = '';
-        barangInput.value = '';
-        qtyInput.value = '1';
-        unitInput.value = 'pcs';
-        keteranganInput.value = '';
-        namaInput.focus();
-    }
-
-    // Reset semua data
-    function resetAllData() {
-        if (confirm("⚠️ PERINGATAN: Semua data akan dihapus permanen! Lanjutkan?")) {
-            stockData = [];
-            nextId = 1;
-            resetForm();
-            renderTable();
-            renderSummary();
-            saveToLocal();
-            showToast("Semua data telah direset.", "success");
-        }
-    }
-
-    // Print laporan (filter aktif + ringkasan tidak tercetak karena print CSS)
-    function printData() {
-        const keyword = searchInput.value.trim().toLowerCase();
-        let dataToPrint = stockData;
-        if (keyword !== "") {
-            dataToPrint = stockData.filter(item => item.barang.toLowerCase().includes(keyword));
-        }
-        
-        const printWindow = window.open('', '_blank');
-        let rowsHtml = '';
-        let totalQtyPrint = 0;
-        
-        dataToPrint.forEach(item => {
-            totalQtyPrint += item.quantity;
-            rowsHtml += `
-                <tr>
-                    <td style="border:1px solid #aaa; padding:8px;">${escapeHtml(item.tanggal)}</td>
-                    <td style="border:1px solid #aaa; padding:8px;">${escapeHtml(item.nama)}</td>
-                    <td style="border:1px solid #aaa; padding:8px;">${escapeHtml(item.barang)}</td>
-                    <td style="border:1px solid #aaa; padding:8px; text-align:center">${item.quantity}</td>
-                    <td style="border:1px solid #aaa; padding:8px;">${escapeHtml(item.unit)}</td>
-                    <td style="border:1px solid #aaa; padding:8px;">${escapeHtml(item.keterangan || '-')}</td>
-                </tr>
-            `;
-        });
-
-        // Buat juga ringkasan total per barang untuk cetak (opsional, biar informatif)
-        const summaryAll = getSummaryPerItem();
-        let summaryPrintHtml = '';
-        if (summaryAll.length > 0) {
-            summaryPrintHtml = `<div style="margin-top:20px;"><h3>📊 Ringkasan Total Stok per Nama Barang (Keseluruhan)</h3>
-            <table style="border-collapse:collapse; width:auto; margin-top:10px;">
-                <thead><tr><th style="border:1px solid #888; padding:6px;">Nama Barang</th><th style="border:1px solid #888; padding:6px;">Total Qty</th><th style="border:1px solid #888; padding:6px;">Satuan</th></tr></thead>
-                <tbody>`;
-            summaryAll.forEach(s => {
-                summaryPrintHtml += `<tr><td style="border:1px solid #aaa; padding:6px;">${escapeHtml(s.namaBarang)}</td>
-                <td style="border:1px solid #aaa; padding:6px; text-align:center">${s.totalQty}</td>
-                <td style="border:1px solid #aaa; padding:6px;">${escapeHtml(s.unit)}</td></tr>`;
-            });
-            summaryPrintHtml += `</tbody></table></div>`;
-        }
-        
-        printWindow.document.write(`
+    // Export ke Excel (format .xls dengan HTML)
+    function exportToExcel() {
+        const summary = getStockSummary();
+        let excelHtml = `
             <html>
-            <head>
-                <title>Laporan Stok - Smart Stock</title>
-                <style>
-                    body { font-family: system-ui, 'Segoe UI', sans-serif; margin: 25px; }
-                    h2 { color: #2c7a4d; }
-                    table { border-collapse: collapse; width: 100%; margin-top: 16px; }
-                    th, td { border: 1px solid #888; padding: 8px; text-align: left; }
-                    th { background: #eef2f5; }
-                    .header-info { margin-bottom: 20px; }
-                </style>
-            </head>
+            <head><meta charset="UTF-8"><title>Laporan Smart Stock</title></head>
             <body>
-                <div class="header-info">
-                    <h2>📋 Laporan Stok Barang</h2>
-                    <p><strong>Tanggal cetak:</strong> ${new Date().toLocaleString('id-ID')}</p>
-                    <p><strong>Filter pencarian:</strong> ${keyword || 'Semua data'}</p>
-                    <p><strong>Jumlah transaksi:</strong> ${dataToPrint.length} | <strong>Total quantity (filter):</strong> ${totalQtyPrint}</p>
-                </div>
-                <h3>📄 Detail Transaksi</h3>
-                <table>
-                    <thead>
-                        <tr><th>Tanggal</th><th>PIC</th><th>Nama Barang</th><th>Qty</th><th>Satuan</th><th>Keterangan</th></tr>
-                    </thead>
-                    <tbody>${rowsHtml}</tbody>
-                </table>
-                ${summaryPrintHtml}
-                <p style="margin-top:20px;">* Ringkasan total per barang dihitung dari keseluruhan data (tanpa filter).</p>
-            </body>
-            </html>
+                <h2>📊 Laporan Stok Barang</h2>
+                <p>Tanggal Export: ${new Date().toLocaleString('id-ID')}</p>
+                <h3>Ringkasan Stok Akhir (Masuk - Keluar)</h3>
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead><tr><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Tersedia</th><th>Satuan</th></tr></thead>
+                    <tbody>`;
+        summary.forEach(item => {
+            excelHtml += `<tr><td>${item.barang}</td><td>${item.totalMasuk}</td><td>${item.totalKeluar}</td><td><strong>${item.stokAkhir}</strong></td><td>${item.satuan}</td></tr>`;
+        });
+        excelHtml += `</tbody></table>
+                <h3>Detail Riwayat Transaksi</h3>
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead><tr><th>Tanggal</th><th>Tipe</th><th>Nama Barang</th><th>Jumlah</th><th>Satuan</th><th>PIC</th></tr></thead>
+                    <tbody>`;
+        transactions.forEach(t => {
+            excelHtml += `<tr><td>${t.tanggal}</td><td>${t.tipe === 'masuk' ? 'MASUK' : 'KELUAR'}</td><td>${t.barang}</td><td>${t.jumlah}</td><td>${t.satuan}</td><td>${t.pic}</td></tr>`;
+        });
+        excelHtml += `</tbody></table></body></html>`;
+        const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `SmartStock_${new Date().toISOString().slice(0,19)}.xls`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showToast("Excel berhasil diekspor", "success");
+    }
+
+    function printReport() {
+        const printWindow = window.open('', '_blank');
+        const summary = getStockSummary();
+        let summaryRows = '';
+        summary.forEach(s => {
+            summaryRows += `<tr><td>${s.barang}</td><td>${s.totalMasuk}</td><td>${s.totalKeluar}</td><td><strong>${s.stokAkhir}</strong></td><td>${s.satuan}</td></tr>`;
+        });
+        let trxRows = '';
+        transactions.forEach(t => {
+            trxRows += `<tr><td>${t.tanggal}</td><td>${t.tipe.toUpperCase()}</td><td>${t.barang}</td><td>${t.jumlah}</td><td>${t.satuan}</td><td>${t.pic}</td></tr>`;
+        });
+        printWindow.document.write(`
+            <html><head><title>Cetak Stok</title><style>body{font-family:sans-serif;}table{border-collapse:collapse;width:100%;margin-bottom:20px;}th,td{border:1px solid #888;padding:8px;text-align:left;}th{background:#f0f0f0;}</style></head>
+            <body><h2>Laporan Smart Stock</h2><p>Tanggal Cetak: ${new Date().toLocaleString()}</p>
+            <h3>Ringkasan Stok Akhir</h3><table><thead><tr><th>Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Akhir</th><th>Satuan</th></tr></thead><tbody>${summaryRows}</tbody></table>
+            <h3>Detail Riwayat</h3><table><thead><tr><th>Tanggal</th><th>Tipe</th><th>Barang</th><th>Jumlah</th><th>Satuan</th><th>PIC</th></tr></thead><tbody>${trxRows}</tbody></table>
+            </body></html>
         `);
         printWindow.document.close();
         printWindow.print();
     }
 
-    // Download CSV (data terfilter)
-    function downloadCSV() {
-        const keyword = searchInput.value.trim().toLowerCase();
-        let dataToExport = stockData;
-        if (keyword !== "") {
-            dataToExport = stockData.filter(item => item.barang.toLowerCase().includes(keyword));
+    function resetAllData() {
+        if (confirm("⚠️ PERINGATAN: Semua data akan dihapus permanen! Lanjutkan?")) {
+            transactions = [];
+            nextId = 1;
+            saveToLocal();
+            renderAll();
+            showToast("Semua data telah direset.", "success");
         }
-        
-        if (dataToExport.length === 0) {
-            showToast("Tidak ada data untuk diekspor", "info");
-            return;
-        }
-
-        const headers = ["Tanggal", "Nama PIC", "Nama Barang", "Quantity", "Satuan", "Keterangan"];
-        const rows = dataToExport.map(item => [
-            item.tanggal, item.nama, item.barang, item.quantity, item.unit, item.keterangan || ''
-        ]);
-        
-        let csvContent = headers.join(",") + "\n";
-        rows.forEach(row => {
-            const escapedRow = row.map(cell => {
-                let cellStr = String(cell);
-                if (cellStr.includes(',') || cellStr.includes('"') || cellStr.includes('\n')) {
-                    cellStr = `"${cellStr.replace(/"/g, '""')}"`;
-                }
-                return cellStr;
-            }).join(",");
-            csvContent += escapedRow + "\n";
-        });
-        
-        const blob = new Blob(["\uFEFF" + csvContent], {type: "text/csv;charset=utf-8;"});
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.setAttribute("download", `smartstock_${new Date().toISOString().slice(0,19)}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        showToast("CSV berhasil diunduh ✓", "success");
     }
 
-    // Simpan ke localStorage
+    // LocalStorage
     function saveToLocal() {
-        localStorage.setItem("smartStockApp", JSON.stringify({ data: stockData, nextId: nextId }));
+        localStorage.setItem("smartStockMasukKeluar", JSON.stringify({ transactions, nextId }));
     }
 
-    // Muat dari localStorage atau sample data
     function loadFromLocal() {
-        const saved = localStorage.getItem("smartStockApp");
+        const saved = localStorage.getItem("smartStockMasukKeluar");
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                if (parsed.data && Array.isArray(parsed.data)) {
-                    stockData = parsed.data;
-                    nextId = parsed.nextId || (stockData.length > 0 ? Math.max(...stockData.map(i => i.id), 0) + 1 : 1);
-                    stockData = stockData.filter(item => item.id && item.tanggal && item.nama && item.barang && typeof item.quantity === 'number' && item.unit);
-                    if (stockData.length > 0 && nextId <= Math.max(...stockData.map(i=>i.id),0)) {
-                        nextId = Math.max(...stockData.map(i=>i.id),0) + 1;
-                    }
+                if (parsed.transactions && Array.isArray(parsed.transactions)) {
+                    transactions = parsed.transactions;
+                    nextId = parsed.nextId || (transactions.length ? Math.max(...transactions.map(t=>t.id),0)+1 : 1);
                 } else {
                     initSampleData();
                 }
-            } catch(e) {
-                initSampleData();
-            }
+            } catch(e) { initSampleData(); }
         } else {
             initSampleData();
         }
-        renderTable();
-        renderSummary();
+        renderAll();
     }
 
-    // Data contoh awal
     function initSampleData() {
-        stockData = [];
+        transactions = [];
         const today = new Date().toISOString().slice(0,10);
-        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
-        stockData.push({ id: 1, tanggal: yesterday, nama: "Ahmad", barang: "Kabel USB", quantity: 15, unit: "pcs", keterangan: "Untuk packing" });
-        stockData.push({ id: 2, tanggal: today, nama: "Siti", barang: "Plastik OPP", quantity: 200, unit: "lembar", keterangan: "Ukuran 10x15" });
-        stockData.push({ id: 3, tanggal: today, nama: "Budi", barang: "Magnet Ferrite", quantity: 50, unit: "buah", keterangan: "Diameter 5mm" });
-        stockData.push({ id: 4, tanggal: today, nama: "Ani", barang: "Kabel USB", quantity: 10, unit: "pcs", keterangan: "Tambahan stok" });
-        nextId = 5;
+        const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+        transactions.push({ id:1, tanggal:yesterday, tipe:'masuk', barang:'Kabel USB', jumlah:50, satuan:'pcs', pic:'Ahmad' });
+        transactions.push({ id:2, tanggal:today, tipe:'masuk', barang:'Plastik OPP', jumlah:200, satuan:'lembar', pic:'Siti' });
+        transactions.push({ id:3, tanggal:today, tipe:'keluar', barang:'Kabel USB', jumlah:10, satuan:'pcs', pic:'Budi' });
+        transactions.push({ id:4, tanggal:today, tipe:'masuk', barang:'Magnet', jumlah:30, satuan:'buah', pic:'Ani' });
+        transactions.push({ id:5, tanggal:today, tipe:'keluar', barang:'Plastik OPP', jumlah:50, satuan:'lembar', pic:'Cahyo' });
+        nextId = 6;
         saveToLocal();
     }
 
-    // Event listeners
-    function initEventListeners() {
-        btnTambah.addEventListener('click', addTransaction);
-        searchInput.addEventListener('input', () => renderTable());
-        printBtn.addEventListener('click', printData);
-        downloadBtn.addEventListener('click', downloadCSV);
-        resetBtn.addEventListener('click', resetAllData);
-        const formInputs = [namaInput, barangInput, qtyInput, unitInput, keteranganInput];
-        formInputs.forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addTransaction();
-                }
+    // Tab Switching
+    function switchTab(tabId) {
+        tabMasuk.classList.remove('active-pane');
+        tabKeluar.classList.remove('active-pane');
+        if (tabId === 'masuk') {
+            tabMasuk.classList.add('active-pane');
+        } else {
+            tabKeluar.classList.add('active-pane');
+        }
+        tabBtns.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-tab') === tabId) btn.classList.add('active');
+        });
+    }
+
+    // Event Listeners
+    function bindEvents() {
+        btnTambahMasuk.addEventListener('click', addMasuk);
+        btnTambahKeluar.addEventListener('click', addKeluar);
+        searchRiwayat.addEventListener('input', renderRiwayat);
+        printBtn.addEventListener('click', printReport);
+        exportExcelBtn.addEventListener('click', exportToExcel);
+        resetAllBtn.addEventListener('click', resetAllData);
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.getAttribute('data-tab');
+                switchTab(tab);
             });
         });
     }
 
     function init() {
-        setDefaultDate();
+        setDefaultDates();
         loadFromLocal();
-        initEventListeners();
+        bindEvents();
     }
-    
     init();
 </script>
 </body>
