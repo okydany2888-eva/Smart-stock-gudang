@@ -213,7 +213,7 @@
         }
 
         /* footer & responsive android */
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             body {
                 padding: 10px;
             }
@@ -242,7 +242,7 @@
         }
 
         /* Landscape mode: lebih rapat, tabel lebih lega */
-        @media (min-width: 640px) and (orientation: landscape) {
+        @media (min-width: 360px) and (orientation: landscape) {
             .form-row {
                 flex-wrap: nowrap;
             }
