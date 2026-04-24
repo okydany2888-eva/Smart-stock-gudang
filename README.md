@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Smart Stock - Total Per Barang</title>
+    <title>Smart Stock</title>
     <style>
         * {
             box-sizing: border-box;
@@ -175,15 +175,6 @@
         .btn-danger {
             background: #dc2626;
         }
-
-        /* Ringkasan Total per Barang */
-        .summary-card {
-            background: #fefce8;
-            border-radius: 20px;
-            padding: 14px 16px;
-            margin: 12px 0 8px 0;
-            border: 1px solid #fde047;
-        }
         .summary-title {
             font-weight: 800;
             font-size: 0.8rem;
@@ -347,7 +338,7 @@
         <div class="double-row">
             <div class="form-group">
                 <label>🔢 Quantity</label>
-                <input type="number" id="qtyInput" value="1" min="1" step="0">
+                <input type="number" id="qtyInput" value="0" min="1" step="0">
             </div>
             <div class="form-group">
                 <label>📏 Satuan</label>
