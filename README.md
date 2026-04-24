@@ -55,7 +55,7 @@
             color: #2b6e3c;
         }
 
-        /* Tab Utama */
+        /* Tab Menu */
         .tab-menu {
             display: flex;
             gap: 8px;
@@ -86,7 +86,7 @@
             display: block;
         }
 
-        /* Form Card */
+        /* Form Card - Tanpa Icon */
         .form-card {
             background: #f8fafc;
             border-radius: 24px;
@@ -113,27 +113,13 @@
             color: #5b6e8c;
             margin-bottom: 5px;
         }
-        .input-with-icon {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .input-with-icon input, .input-with-icon select {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 10px 12px 10px 36px;
+            padding: 10px 12px;
             font-size: 0.9rem;
             border: 1px solid #cbd5e1;
             border-radius: 18px;
             background: white;
-        }
-        .input-with-icon select {
-            padding: 10px 12px 10px 36px;
-        }
-        .input-icon {
-            position: absolute;
-            left: 12px;
-            font-size: 1rem;
-            pointer-events: none;
         }
         button {
             background: #2c7a4d;
@@ -146,23 +132,15 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        button:active {
-            transform: scale(0.97);
-        }
+        button:active { transform: scale(0.97); }
         .btn-outline {
             background: white;
             border: 1px solid #cbd5e1;
             color: #1e293b;
         }
-        .btn-outline:hover {
-            background: #f1f5f9;
-        }
-        .btn-danger {
-            background: #dc2626;
-        }
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
+        .btn-outline:hover { background: #f1f5f9; }
+        .btn-danger { background: #dc2626; }
+        .btn-danger:hover { background: #b91c1c; }
         .add-new-link {
             margin-top: 8px;
             font-size: 0.7rem;
@@ -170,6 +148,7 @@
             cursor: pointer;
             display: inline-block;
         }
+        .add-new-link:hover { text-decoration: underline; }
 
         /* Ringkasan Stok */
         .stock-summary {
@@ -189,9 +168,7 @@
             text-align: center;
             border-bottom: 1px solid #e2e8f0;
         }
-        .summary-table th {
-            background: #dcfce7;
-        }
+        .summary-table th { background: #dcfce7; }
         .stock-tersedia {
             font-weight: 800;
             color: #15803d;
@@ -201,37 +178,65 @@
             display: inline-block;
         }
 
-        /* Halaman Rekap (Tab Baru) - Tabel kecil tanpa scroll */
-        .rekap-container {
-            background: white;
-            border-radius: 20px;
-            padding: 8px;
-            overflow-x: auto;
+        /* REKAP BULANAN - per Nama Barang (diletakkan di bawah setelah riwayat) */
+        .rekap-section {
+            margin-top: 32px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
         }
-        .rekap-table {
+        .rekap-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f3b2c;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rekap-bulan-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .rekap-bulan-header {
+            background: #1e293b;
+            color: white;
+            padding: 10px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .rekap-bulan-header:hover { background: #0f172a; }
+        .rekap-table-wrapper {
+            overflow-x: auto;
+            padding: 12px;
+        }
+        .rekap-item-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.7rem;
-            min-width: 300px;
         }
-        .rekap-table th, .rekap-table td {
-            padding: 6px 4px;
+        .rekap-item-table th, .rekap-item-table td {
+            padding: 8px 6px;
             text-align: center;
             border: 1px solid #e2e8f0;
-            font-size: 0.7rem;
         }
-        .rekap-table th {
+        .rekap-item-table th {
             background: #eef2f9;
             font-weight: 700;
         }
-        .rekap-section-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin: 16px 0 8px 0;
-            color: #1e293b;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 20px;
+        .bulan-total {
+            background: #eef2ff;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #e2e8f0;
         }
 
         /* Riwayat per Bulan */
@@ -250,9 +255,7 @@
             display: flex;
             justify-content: space-between;
         }
-        .month-table-wrapper {
-            overflow-x: auto;
-        }
+        .month-table-wrapper { overflow-x: auto; }
         .month-table {
             width: 100%;
             border-collapse: collapse;
@@ -263,9 +266,7 @@
             text-align: center;
             border-bottom: 1px solid #f0f4f9;
         }
-        .month-table th {
-            background: #eef2f9;
-        }
+        .month-table th { background: #eef2f9; }
         .row-masuk { background-color: #f0fdf4; border-left: 4px solid #22c55e; }
         .row-keluar { background-color: #fef2f2; border-left: 4px solid #ef4444; }
         .badge-masuk { background: #22c55e20; color: #166534; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; }
@@ -332,54 +333,29 @@
         <span class="global-stock" id="globalStockValue">Total Stok: 0</span>
     </div>
 
-    <!-- Tab Menu Utama -->
+    <!-- Tab Menu -->
     <div class="tab-menu no-print">
         <button class="tab-btn active" data-tab="masuk">Barang Masuk</button>
         <button class="tab-btn" data-tab="keluar">Barang Keluar</button>
-        <button class="tab-btn" data-tab="rekap">📊 Rekap Bulanan</button>
     </div>
 
     <!-- Panel Barang Masuk -->
     <div id="tabMasuk" class="tab-pane active-pane">
         <div class="form-card">
             <div class="form-row">
-                <div class="form-group">
-                    <label>Tanggal Masuk</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">📅</span>
-                        <input type="date" id="tanggalMasuk">
-                    </div>
-                </div>
+                <div class="form-group"><label>Tanggal Masuk</label><input type="date" id="tanggalMasuk"></div>
                 <div class="form-group">
                     <label>Nama Barang</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">📦</span>
-                        <select id="namaBarangMasuk"><option value="">-- Pilih --</option></select>
-                    </div>
+                    <select id="namaBarangMasuk"><option value="">-- Pilih Barang --</option></select>
                     <div class="add-new-link" onclick="showAddBarangModal('masuk')">+ Tambah Barang Baru</div>
                 </div>
                 <div class="form-group">
                     <label>Satuan</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">📏</span>
-                        <select id="satuanMasuk"><option value="">-- Pilih --</option></select>
-                    </div>
+                    <select id="satuanMasuk"><option value="">-- Pilih Satuan --</option></select>
                     <div class="add-new-link" onclick="showAddSatuanModal('masuk')">+ Tambah Satuan Baru</div>
                 </div>
-                <div class="form-group">
-                    <label>Jumlah Masuk</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">🔢</span>
-                        <input type="number" id="jumlahMasuk" value="1" min="1">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>PIC</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">👤</span>
-                        <input type="text" id="picMasuk" placeholder="Nama">
-                    </div>
-                </div>
+                <div class="form-group"><label>Jumlah Masuk</label><input type="number" id="jumlahMasuk" value="1" min="1"></div>
+                <div class="form-group"><label>PIC</label><input type="text" id="picMasuk" placeholder="Nama"></div>
                 <button id="btnTambahMasuk">Tambah Masuk</button>
             </div>
         </div>
@@ -389,80 +365,38 @@
     <div id="tabKeluar" class="tab-pane">
         <div class="form-card">
             <div class="form-row">
-                <div class="form-group">
-                    <label>Tanggal Keluar</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">📅</span>
-                        <input type="date" id="tanggalKeluar">
-                    </div>
-                </div>
+                <div class="form-group"><label>Tanggal Keluar</label><input type="date" id="tanggalKeluar"></div>
                 <div class="form-group">
                     <label>Nama Barang</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">📦</span>
-                        <select id="namaBarangKeluar"><option value="">-- Pilih --</option></select>
-                    </div>
+                    <select id="namaBarangKeluar"><option value="">-- Pilih Barang --</option></select>
                     <div class="add-new-link" onclick="showAddBarangModal('keluar')">+ Tambah Barang Baru</div>
                 </div>
                 <div class="form-group">
                     <label>Satuan</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">📏</span>
-                        <select id="satuanKeluar"><option value="">-- Pilih --</option></select>
-                    </div>
+                    <select id="satuanKeluar"><option value="">-- Pilih Satuan --</option></select>
                     <div class="add-new-link" onclick="showAddSatuanModal('keluar')">+ Tambah Satuan Baru</div>
                 </div>
-                <div class="form-group">
-                    <label>Jumlah Keluar</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">🔢</span>
-                        <input type="number" id="jumlahKeluar" value="1" min="1">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>PIC</label>
-                    <div class="input-with-icon">
-                        <span class="input-icon">👤</span>
-                        <input type="text" id="picKeluar" placeholder="Nama">
-                    </div>
-                </div>
+                <div class="form-group"><label>Jumlah Keluar</label><input type="number" id="jumlahKeluar" value="1" min="1"></div>
+                <div class="form-group"><label>PIC</label><input type="text" id="picKeluar" placeholder="Nama"></div>
                 <button id="btnTambahKeluar" style="background:#dc2626;">Tambah Keluar</button>
             </div>
         </div>
     </div>
 
-    <!-- Panel Rekap Bulanan (Halaman Baru) -->
-    <div id="tabRekap" class="tab-pane">
-        <div class="stock-summary" style="background:#f8fafc; border-color:#cbd5e1;">
-            <h3 style="color:#1e293b; margin-bottom:12px;">📊 REKAP BULANAN - TOTAL MASUK & KELUAR</h3>
-            <div id="rekapContainer" class="rekap-container">
-                <div style="text-align:center; padding:20px;">Memuat data...</div>
-            </div>
-            <div style="margin-top:16px; padding:8px; background:#eef2ff; border-radius:16px;">
-                <div style="font-size:0.7rem; color:#1e40af; text-align:center;">✅ Rekap per bulan: Total quantity barang masuk dan keluar, serta jumlah item / transaksi</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- RINGKASAN STOK AKHIR (hanya tampil di tab masuk/keluar) -->
-    <div class="stock-summary no-print" id="stockSummaryPanel">
+    <!-- RINGKASAN STOK AKHIR -->
+    <div class="stock-summary no-print">
         <h3>STOCK AKHIR PER NAMA BARANG (Masuk - Keluar)</h3>
         <div class="summary-table-wrapper">
             <table class="summary-table">
                 <thead><tr><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Tersedia</th><th>Satuan</th></tr></thead>
-                <tbody id="summaryStockBody"><tr><td colspan="5">Belum ada data</td></tr></tbody>
+                <tbody id="summaryStockBody"><tr><td colspan="5">Belum ada数据</td></tr></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Riwayat Transaksi & Aksi -->
+    <!-- Riwayat Transaksi -->
     <div class="action-bar no-print">
-        <div class="search-section">
-            <div class="input-with-icon">
-                <span class="input-icon">🔍</span>
-                <input type="text" id="searchRiwayat" placeholder="Cari nama barang...">
-            </div>
-        </div>
+        <div class="search-section"><input type="text" id="searchRiwayat" placeholder="Cari nama barang..."></div>
         <div class="btn-group">
             <button id="printBtn" class="btn-outline">Print</button>
             <button id="exportExcelBtn" class="btn-outline">Export Excel</button>
@@ -471,6 +405,16 @@
     </div>
 
     <div id="riwayatContainer" class="riwayat-container"></div>
+
+    <!-- ========== REKAP BULANAN PER NAMA BARANG (di bagian bawah) ========== -->
+    <div class="rekap-section no-print" id="rekapSection">
+        <div class="rekap-title">📊 REKAP BULANAN - DETAIL PER NAMA BARANG</div>
+        <div id="rekapContainer" style="margin-top: 8px;">
+            <div style="text-align:center; padding:20px;">Memuat data...</div>
+        </div>
+        <div class="footer-note" style="margin-top:12px;">✅ Rekap per bulan: Total quantity masuk & keluar per nama barang dalam satu bulan</div>
+    </div>
+
     <div class="footer-note no-print">Stok akhir = Total Masuk - Total Keluar | Klik bulan untuk expand/collapse | Data tersimpan otomatis</div>
 </div>
 
@@ -494,7 +438,7 @@
     let masterSatuan = [];
     let modalContext = { formType: 'masuk', dataType: 'barang' };
 
-    // DOM
+    // DOM Elements
     const tanggalMasuk = document.getElementById('tanggalMasuk');
     const namaBarangMasuk = document.getElementById('namaBarangMasuk');
     const satuanMasuk = document.getElementById('satuanMasuk');
@@ -526,8 +470,6 @@
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabMasukDiv = document.getElementById('tabMasuk');
     const tabKeluarDiv = document.getElementById('tabKeluar');
-    const tabRekapDiv = document.getElementById('tabRekap');
-    const stockSummaryPanel = document.getElementById('stockSummaryPanel');
 
     // Helper
     function formatTanggal(dateString) {
@@ -612,7 +554,7 @@
     }
     function renderStockSummary() {
         const summary = getStockSummary();
-        if (summary.length === 0) { summaryStockBody.innerHTML = '<tr><td colspan="5">Belum ada data</td></tr>'; globalStockValue.innerText = 'Total Stok: 0'; return; }
+        if (summary.length === 0) { summaryStockBody.innerHTML = '<tr><td colspan="5">Belum ada数据</td></tr>'; globalStockValue.innerText = 'Total Stok: 0'; return; }
         let html = '';
         summary.forEach(item => {
             html += `<tr><td style="font-weight:700;">${escapeHtml(item.namaBarang)}</td><td>${item.totalMasuk}</td><td>${item.totalKeluar}</td><td><span class="stock-tersedia">${item.stokAkhir}</span></td><td>${escapeHtml(item.satuan)}</td></tr>`;
@@ -621,53 +563,90 @@
         globalStockValue.innerText = `Total Stok: ${summary.reduce((s,item) => s + item.stokAkhir, 0)}`;
     }
 
-    // REKAP BULANAN: total quantity masuk/keluar, jumlah transaksi, jumlah nama barang unik
+    // ========== REKAP BULANAN PER NAMA BARANG (detail per barang dalam 1 bulan) ==========
     function renderRekapBulanan() {
-        const grouped = new Map(); // key: bulan-tahun
+        if (transactions.length === 0) {
+            rekapContainer.innerHTML = '<div style="text-align:center; padding:20px; background:#f8fafc; border-radius:20px;">Belum ada data transaksi</div>';
+            return;
+        }
+        // Kelompokkan transaksi per bulan
+        const bulanMap = new Map(); // key: bulan-tahun, value: { namaBulan, items: Map<namaBarang+satuan, {masuk, keluar, satuan, barang}> }
         for (const trx of transactions) {
             const date = new Date(trx.tanggal);
             const monthYear = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
             const monthName = date.toLocaleDateString('id-ID', { year: 'numeric', month: 'long' });
-            if (!grouped.has(monthYear)) {
-                grouped.set(monthYear, { name: monthName, totalMasukQty: 0, totalKeluarQty: 0, totalMasukTrans: 0, totalKeluarTrans: 0, barangSet: new Set() });
+            if (!bulanMap.has(monthYear)) {
+                bulanMap.set(monthYear, { namaBulan: monthName, items: new Map() });
             }
-            const data = grouped.get(monthYear);
-            if (trx.tipe === 'masuk') {
-                data.totalMasukQty += trx.jumlah;
-                data.totalMasukTrans++;
-            } else {
-                data.totalKeluarQty += trx.jumlah;
-                data.totalKeluarTrans++;
+            const bulan = bulanMap.get(monthYear);
+            const itemKey = `${trx.barang.toLowerCase()}|${trx.satuan.toLowerCase()}`;
+            if (!bulan.items.has(itemKey)) {
+                bulan.items.set(itemKey, { namaBarang: trx.barang, satuan: trx.satuan, totalMasuk: 0, totalKeluar: 0 });
             }
-            data.barangSet.add(trx.barang.toLowerCase());
+            const item = bulan.items.get(itemKey);
+            if (trx.tipe === 'masuk') item.totalMasuk += trx.jumlah;
+            else item.totalKeluar += trx.jumlah;
         }
-        if (grouped.size === 0) {
-            rekapContainer.innerHTML = '<div style="text-align:center; padding:20px;">Belum ada data transaksi</div>';
-            return;
+        // Urutkan bulan dari terbaru
+        const sortedBulans = Array.from(bulanMap.keys()).sort((a,b) => b.localeCompare(a));
+        let html = '';
+        for (const monthKey of sortedBulans) {
+            const bulan = bulanMap.get(monthKey);
+            const itemsArray = Array.from(bulan.items.values()).sort((a,b) => a.namaBarang.localeCompare(b.namaBarang, 'id'));
+            let totalMasukBulan = 0, totalKeluarBulan = 0;
+            let rowsHtml = '';
+            for (const item of itemsArray) {
+                totalMasukBulan += item.totalMasuk;
+                totalKeluarBulan += item.totalKeluar;
+                rowsHtml += `<tr>
+                                <td style="font-weight:500;">${escapeHtml(item.namaBarang)}</td>
+                                <td>${item.totalMasuk}</td>
+                                <td>${item.totalKeluar}</td>
+                                <td style="font-weight:bold;">${item.totalMasuk - item.totalKeluar}</td>
+                                <td>${escapeHtml(item.satuan)}</td>
+                             </tr>`;
+            }
+            const selisihBulan = totalMasukBulan - totalKeluarBulan;
+            html += `
+                <div class="rekap-bulan-card">
+                    <div class="rekap-bulan-header" onclick="toggleRekapMonth(this)">
+                        <span>📅 ${bulan.namaBulan}</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="rekap-table-wrapper">
+                        <table class="rekap-item-table">
+                            <thead>
+                                <tr><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Selisih</th><th>Satuan</th></tr>
+                            </thead>
+                            <tbody>${rowsHtml}</tbody>
+                        </table>
+                        <div class="bulan-total">
+                            <span>📊 TOTAL BULAN INI</span>
+                            <span>Masuk: ${totalMasukBulan} | Keluar: ${totalKeluarBulan} | Selisih: ${selisihBulan}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
-        const sorted = Array.from(grouped.entries()).sort((a,b) => b[0].localeCompare(a[0]));
-        let html = '<table class="rekap-table"><thead><tr><th>Bulan</th><th>Total Masuk (Qty)</th><th>Total Keluar (Qty)</th><th>Selisih</th><th>Jumlah Transaksi Masuk</th><th>Jumlah Transaksi Keluar</th><th>Jenis Barang Unik</th></tr></thead><tbody>';
-        for (const [key, val] of sorted) {
-            const selisih = val.totalMasukQty - val.totalKeluarQty;
-            html += `<tr>
-                        <td><strong>${val.name}</strong></td>
-                        <td style="color:#15803d;">${val.totalMasukQty}</td>
-                        <td style="color:#b91c1c;">${val.totalKeluarQty}</td>
-                        <td style="font-weight:bold;">${selisih}</td>
-                        <td>${val.totalMasukTrans}</td>
-                        <td>${val.totalKeluarTrans}</td>
-                        <td>${val.barangSet.size}</td>
-                     </tr>`;
-        }
-        html += `</tbody></table><div style="margin-top:12px; font-size:0.65rem; text-align:center; color:#475569;">📌 Keterangan: Selisih = Total Masuk - Total Keluar | Jenis Barang Unik = jumlah nama barang berbeda dalam bulan tersebut</div>`;
         rekapContainer.innerHTML = html;
     }
 
-    // Riwayat per Bulan
+    window.toggleRekapMonth = function(header) {
+        const wrapper = header.nextElementSibling;
+        if (wrapper.style.display === 'none') {
+            wrapper.style.display = 'block';
+            header.querySelector('span:last-child').innerHTML = '▼';
+        } else {
+            wrapper.style.display = 'none';
+            header.querySelector('span:last-child').innerHTML = '▶';
+        }
+    };
+
+    // Riwayat per Bulan (expand/collapse)
     function renderRiwayatPerBulan() {
         const keyword = searchRiwayat.value.trim().toLowerCase();
         let filtered = keyword ? transactions.filter(t => t.barang.toLowerCase().includes(keyword)) : transactions;
-        if (filtered.length === 0) { riwayatContainer.innerHTML = '<div class="empty-data">Tidak ada transaksi</div>'; return; }
+        if (filtered.length === 0) { riwayatContainer.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;">Tidak ada transaksi</div>'; return; }
         const grouped = {};
         filtered.forEach(trx => {
             const date = new Date(trx.tanggal);
@@ -686,21 +665,26 @@
                 const rowClass = trx.tipe === 'masuk' ? 'row-masuk' : 'row-keluar';
                 const tipeBadge = trx.tipe === 'masuk' ? '<span class="badge-masuk">MASUK</span>' : '<span class="badge-keluar">KELUAR</span>';
                 rows += `<tr class="${rowClass}">
-                            <td>${formatTanggal(trx.tanggal)}</td>
-                            <td>${tipeBadge}</td>
-                            <td><strong>${escapeHtml(trx.barang)}</strong></td>
-                            <td>${trx.jumlah}</td>
-                            <td>${escapeHtml(trx.satuan)}</td>
-                            <td>${escapeHtml(trx.pic)}</td>
-                            <td class="no-print">
-                                <button class="action-btn edit-btn" data-id="${trx.id}">Edit</button>
-                                <button class="action-btn delete-btn" data-id="${trx.id}">Hapus</button>
-                            </td>
-                          </tr>`;
+                             <td>${formatTanggal(trx.tanggal)}</td>
+                             <td>${tipeBadge}</td>
+                             <td><strong>${escapeHtml(trx.barang)}</strong></td>
+                             <td>${trx.jumlah}</td>
+                             <td>${escapeHtml(trx.satuan)}</td>
+                             <td>${escapeHtml(trx.pic)}</td>
+                             <td class="no-print">
+                                 <button class="action-btn edit-btn" data-id="${trx.id}">Edit</button>
+                                 <button class="action-btn delete-btn" data-id="${trx.id}">Hapus</button>
+                             </td>
+                           </tr>`;
             }
             html += `<div class="month-section">
                         <div class="month-header" onclick="toggleMonth(this)"><span>📅 ${month.name}</span><span>▼</span></div>
-                        <div class="month-table-wrapper"><table class="month-table"><thead><tr><th>Tanggal</th><th>Tipe</th><th>Barang</th><th>Jumlah</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table></div>
+                        <div class="month-table-wrapper">
+                            <table class="month-table">
+                                <thead><tr><th>Tanggal</th><th>Tipe</th><th>Barang</th><th>Jumlah</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead>
+                                <tbody>${rows}</tbody>
+                            </table>
+                        </div>
                      </div>`;
         }
         riwayatContainer.innerHTML = html;
@@ -805,21 +789,17 @@
     }
 
     function switchTab(tabId) {
-        tabMasukDiv.classList.remove('active-pane'); tabKeluarDiv.classList.remove('active-pane'); tabRekapDiv.classList.remove('active-pane');
+        tabMasukDiv.classList.remove('active-pane');
+        tabKeluarDiv.classList.remove('active-pane');
         if (tabId === 'masuk') tabMasukDiv.classList.add('active-pane');
-        else if (tabId === 'keluar') tabKeluarDiv.classList.add('active-pane');
-        else tabRekapDiv.classList.add('active-pane');
+        else tabKeluarDiv.classList.add('active-pane');
         tabBtns.forEach(btn => { btn.classList.remove('active'); if(btn.getAttribute('data-tab')===tabId) btn.classList.add('active'); });
-        // sembunyikan stock summary di tab rekap
-        if (tabId === 'rekap') stockSummaryPanel.style.display = 'none';
-        else stockSummaryPanel.style.display = 'block';
-        if (tabId === 'rekap') renderRekapBulanan();
     }
 
     function bindEvents() {
         btnTambahMasuk.addEventListener('click', addMasuk);
         btnTambahKeluar.addEventListener('click', addKeluar);
-        searchRiwayat.addEventListener('input', () => { renderRiwayatPerBulan(); if(document.getElementById('tabRekap').classList.contains('active-pane')) renderRekapBulanan(); });
+        searchRiwayat.addEventListener('input', () => { renderRiwayatPerBulan(); renderRekapBulanan(); });
         printBtn.addEventListener('click', printReport);
         exportExcelBtn.addEventListener('click', exportToExcel);
         resetAllBtn.addEventListener('click', resetAllData);
