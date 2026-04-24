@@ -151,6 +151,10 @@
         .btn-danger {
             background: #dc2626;
         }
+        .btn-warning {
+            background: #eab308;
+            color: #1e293b;
+        }
         .add-new-link {
             margin-top: 8px;
             font-size: 0.7rem;
@@ -224,7 +228,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.8rem;
-            min-width: 600px;
+            min-width: 700px;
         }
         th {
             background: #eef2f9;
@@ -245,14 +249,27 @@
             background-color: #fef2f2;
             border-left: 4px solid #ef4444;
         }
-        .delete-btn {
+        .action-btn {
             background: none;
             border: none;
             font-size: 1.1rem;
             cursor: pointer;
-            color: #b45309;
-            width: auto;
             padding: 4px 8px;
+            margin: 0 2px;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+        .edit-btn {
+            color: #2563eb;
+        }
+        .edit-btn:hover {
+            background: #dbeafe;
+        }
+        .delete-btn {
+            color: #dc2626;
+        }
+        .delete-btn:hover {
+            background: #fee2e2;
         }
         .empty-row td {
             text-align: center;
@@ -307,20 +324,76 @@
             .no-print { display: none; }
             body { background: white; }
         }
+
+        /* Modal Edit */
+        .edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .edit-modal-content {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .edit-modal-content h3 {
+            margin-bottom: 20px;
+            color: #0f3b2c;
+        }
+        .edit-form-group {
+            margin-bottom: 16px;
+        }
+        .edit-form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #5b6e8c;
+        }
+        .edit-form-group input, .edit-form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 18px;
+            font-size: 0.9rem;
+        }
+        .edit-modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
     </style>
 </head>
 <body>
 <div class="app-container">
     <div class="header">
         <h1>📦 Smart Stock</h1>
+        <span class="global-stock" id="globalStockValue">Total Stok: 0</span>
+    </div>
 
     <!-- Tab Menu -->
     <div class="tab-menu no-print">
-        <button class="tab-btn active" data-tab="masuk">📥 Barang Masuk</button>
-        <button class="tab-btn" data-tab="keluar">📤 Barang Keluar</button>
+        <button class="tab-btn active" data-tab="masuk">Barang Masuk</button>
+        <button class="tab-btn" data-tab="keluar">Barang Keluar</button>
     </div>
 
-    <!-- Panel Barang Masuk (Hijau) -->
+    <!-- Panel Barang Masuk -->
     <div id="tabMasuk" class="tab-pane active-pane">
         <div class="form-card">
             <div class="form-row">
@@ -355,7 +428,7 @@
         </div>
     </div>
 
-    <!-- Panel Barang Keluar (Merah) -->
+    <!-- Panel Barang Keluar -->
     <div id="tabKeluar" class="tab-pane">
         <div class="form-card">
             <div class="form-row">
@@ -390,19 +463,13 @@
         </div>
     </div>
 
-    <!-- RINGKASAN TOTAL STOK AKHIR PER NAMA BARANG (MASUK - KELUAR) -->
+    <!-- RINGKASAN STOK AKHIR -->
     <div class="stock-summary no-print">
         <h3>📊 STOCK AKHIR PER NAMA BARANG <span style="font-size:0.75rem;">(Total Masuk - Total Keluar)</span></h3>
         <div class="summary-table-wrapper">
             <table class="summary-table" id="summaryStockTable">
                 <thead>
-                    <tr>
-                        <th>Nama Barang</th>
-                        <th>Total Masuk</th>
-                        <th>Total Keluar</th>
-                        <th>Stok Tersedia di Gudang</th>
-                        <th>Satuan</th>
-                    </tr>
+                    <tr><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Tersedia</th><th>Satuan</th></tr>
                 </thead>
                 <tbody id="summaryStockBody">
                     <tr><td colspan="5" style="text-align:center;">Belum ada data transaksi</td></tr>
@@ -433,10 +500,10 @@
             </tbody>
         </table>
     </div>
-    <div class="footer-note no-print">✅ Stok akhir = Total Masuk - Total Keluar (per kombinasi Nama Barang + Satuan) | Data tersimpan otomatis</div>
+    <div class="footer-note no-print">✅ Stok akhir = Total Masuk - Total Keluar | ✏️ Klik Edit untuk merevisi data | Data tersimpan otomatis</div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Tambah Barang/Satuan -->
 <div id="modalOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
     <div style="background:white; padding:24px; border-radius:24px; width:300px; max-width:90%;">
         <h3 id="modalTitle" style="margin-bottom:16px;">Tambah Baru</h3>
@@ -450,14 +517,12 @@
 
 <script>
     // ======================== DATA STORAGE ========================
-    let transactions = [];      // { id, tanggal, tipe, barang, jumlah, satuan, pic }
+    let transactions = [];
     let nextId = 1;
-    
-    // Master data untuk dropdown
     let masterBarang = [];
     let masterSatuan = [];
-
     let modalContext = { formType: 'masuk', dataType: 'barang' };
+    let currentEditId = null;
 
     // DOM Elements
     const tanggalMasuk = document.getElementById('tanggalMasuk');
@@ -476,7 +541,8 @@
 
     const searchRiwayat = document.getElementById('searchRiwayat');
     const riwayatBody = document.getElementById('riwayatBody');
-    const summaryStockBody = document.getElementById('summaryStockBody')
+    const summaryStockBody = document.getElementById('summaryStockBody');
+    const globalStockValue = document.getElementById('globalStockValue');
     const printBtn = document.getElementById('printBtn');
     const exportExcelBtn = document.getElementById('exportExcelBtn');
     const resetAllBtn = document.getElementById('resetAllBtn');
@@ -491,7 +557,6 @@
     const tabMasuk = document.getElementById('tabMasuk');
     const tabKeluar = document.getElementById('tabKeluar');
 
-    // Helper
     function setDefaultDates() {
         const today = new Date().toISOString().slice(0,10);
         if (!tanggalMasuk.value) tanggalMasuk.value = today;
@@ -531,7 +596,7 @@
         satuanKeluar.innerHTML = satuanHtml;
     }
 
-    // Modal
+    // Modal Tambah
     function showAddBarangModal(formType) {
         modalContext = { formType, dataType: 'barang' };
         modalTitle.innerText = 'Tambah Nama Barang Baru';
@@ -569,9 +634,9 @@
         showToast(`${modalContext.dataType === 'barang' ? 'Barang' : 'Satuan'} "${newValue}" ditambahkan`, 'success');
     }
 
-    // Fungsi menghitung stok akhir per barang & satuan
+    // Stok Summary
     function getStockSummary() {
-        const map = new Map(); // key: barang_lower|satuan_lower
+        const map = new Map();
         for (const trx of transactions) {
             const key = `${trx.barang.toLowerCase()}|${trx.satuan.toLowerCase()}`;
             if (!map.has(key)) {
@@ -589,13 +654,11 @@
         return summary;
     }
 
-    // Hitung total stok keseluruhan
     function getGlobalTotalStock() {
         const summary = getStockSummary();
         return summary.reduce((sum, item) => sum + item.stokAkhir, 0);
     }
 
-    // Render Tabel Ringkasan Stok Akhir per Nama Barang
     function renderStockSummary() {
         const summary = getStockSummary();
         if (summary.length === 0) {
@@ -611,9 +674,13 @@
                         <td>${item.totalKeluar}</td>
                         <td><span class="stock-tersedia">${item.stokAkhir}</span></td>
                         <td><span class="badge-unit-sm">${escapeHtml(item.satuan)}</span></td>
-                      </tr>`;
+                     </tr>`;
         }
-    // Render Riwayat dengan filter
+        summaryStockBody.innerHTML = html;
+        if(globalStockValue) globalStockValue.innerText = `Total Stok: ${getGlobalTotalStock()}`;
+    }
+
+    // Render Riwayat dengan Edit & Delete
     function renderRiwayat() {
         const keyword = searchRiwayat.value.trim().toLowerCase();
         let filtered = transactions;
@@ -635,15 +702,128 @@
                         <td>${trx.jumlah}</td>
                         <td>${escapeHtml(trx.satuan)}</td>
                         <td>${escapeHtml(trx.pic)}</td>
-                        <td class="no-print"><button class="delete-btn" data-id="${trx.id}" title="Hapus">🗑️</button></td>
-                      </tr>`;
+                        <td class="no-print">
+                            <button class="action-btn edit-btn" data-id="${trx.id}" title="Edit">✏️</button>
+                            <button class="action-btn delete-btn" data-id="${trx.id}" title="Hapus">🗑️</button>
+                        </td>
+                     </tr>`;
         }
         riwayatBody.innerHTML = html;
+        
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                openEditModal(id);
+            });
+        });
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = parseInt(btn.getAttribute('data-id'));
                 deleteTransaction(id);
             });
+        });
+    }
+
+    // EDIT MODAL
+    function openEditModal(id) {
+        const trx = transactions.find(t => t.id === id);
+        if (!trx) return;
+        currentEditId = id;
+        
+        // Buat modal edit
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'edit-modal';
+        modalDiv.innerHTML = `
+            <div class="edit-modal-content">
+                <h3>✏️ Edit Transaksi</h3>
+                <div class="edit-form-group">
+                    <label>📅 Tanggal</label>
+                    <input type="date" id="editTanggal" value="${trx.tanggal}">
+                </div>
+                <div class="edit-form-group">
+                    <label>📦 Nama Barang</label>
+                    <select id="editBarang">
+                        <option value="">-- Pilih Barang --</option>
+                        ${masterBarang.map(b => `<option value="${escapeHtml(b)}" ${b === trx.barang ? 'selected' : ''}>${escapeHtml(b)}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="edit-form-group">
+                    <label>📏 Satuan</label>
+                    <select id="editSatuan">
+                        <option value="">-- Pilih Satuan --</option>
+                        ${masterSatuan.map(s => `<option value="${escapeHtml(s)}" ${s === trx.satuan ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="edit-form-group">
+                    <label>🔢 Jumlah</label>
+                    <input type="number" id="editJumlah" value="${trx.jumlah}" min="1">
+                </div>
+                <div class="edit-form-group">
+                    <label>👤 PIC</label>
+                    <input type="text" id="editPic" value="${escapeHtml(trx.pic)}" placeholder="Nama PIC">
+                </div>
+                <div class="edit-modal-buttons">
+                    <button id="editCancelBtn" class="btn-cancel">Batal</button>
+                    <button id="editSaveBtn" style="background:#2c7a4d;">Simpan Perubahan</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modalDiv);
+        
+        document.getElementById('editCancelBtn').addEventListener('click', () => {
+            modalDiv.remove();
+        });
+        document.getElementById('editSaveBtn').addEventListener('click', () => {
+            const newTanggal = document.getElementById('editTanggal').value;
+            const newBarang = document.getElementById('editBarang').value;
+            const newSatuan = document.getElementById('editSatuan').value;
+            const newJumlah = parseInt(document.getElementById('editJumlah').value);
+            const newPic = document.getElementById('editPic').value.trim();
+            
+            if (!newTanggal) { showToast("Tanggal harus diisi", "info"); return; }
+            if (!newBarang) { showToast("Pilih nama barang", "info"); return; }
+            if (!newSatuan) { showToast("Pilih satuan", "info"); return; }
+            if (isNaN(newJumlah) || newJumlah <= 0) { showToast("Jumlah harus > 0", "info"); return; }
+            if (!newPic) { showToast("Nama PIC harus diisi", "info"); return; }
+            
+            // Jika barang atau satuan berubah, validasi stok untuk transaksi keluar
+            const oldTrx = transactions.find(t => t.id === id);
+            if (oldTrx.tipe === 'keluar') {
+                // Hitung stok tersedia SELAIN transaksi ini
+                let stokSebelum = 0;
+                for (const tr of transactions) {
+                    if (tr.id === id) continue;
+                    if (tr.barang.toLowerCase() === newBarang.toLowerCase() && tr.satuan.toLowerCase() === newSatuan.toLowerCase()) {
+                        if (tr.tipe === 'masuk') stokSebelum += tr.jumlah;
+                        else if (tr.tipe === 'keluar') stokSebelum -= tr.jumlah;
+                    }
+                }
+                if (stokSebelum < newJumlah) {
+                    showToast(`⚠️ Stok ${newBarang} (${newSatuan}) tidak mencukupi! Tersedia: ${stokSebelum}`, "info");
+                    return;
+                }
+            }
+            
+            // Update data
+            const index = transactions.findIndex(t => t.id === id);
+            if (index !== -1) {
+                transactions[index] = {
+                    ...transactions[index],
+                    tanggal: newTanggal,
+                    barang: newBarang,
+                    satuan: newSatuan,
+                    jumlah: newJumlah,
+                    pic: newPic
+                };
+                saveToLocal();
+                renderRiwayat();
+                renderStockSummary();
+                showToast("Data berhasil diperbarui", "success");
+            }
+            modalDiv.remove();
+        });
+        modalDiv.addEventListener('click', (e) => {
+            if (e.target === modalDiv) modalDiv.remove();
         });
     }
 
@@ -685,7 +865,7 @@
         showToast("✅ Barang Masuk ditambahkan", "success");
     }
 
-    // Tambah Keluar dengan validasi stok
+    // Tambah Keluar
     function addKeluar() {
         const tanggal = tanggalKeluar.value.trim();
         const barang = namaBarangKeluar.value;
@@ -699,7 +879,6 @@
         if (isNaN(jumlah) || jumlah <= 0) { showToast("Jumlah harus > 0", "info"); return; }
         if (!pic) { showToast("Nama PIC harus diisi", "info"); return; }
 
-        // Hitung stok tersedia
         let stokTersedia = 0;
         for (const trx of transactions) {
             if (trx.barang.toLowerCase() === barang.toLowerCase() && trx.satuan.toLowerCase() === satuan.toLowerCase()) {
@@ -728,7 +907,6 @@
         satuanMasuk.value = '';
         jumlahMasuk.value = '1';
         picMasuk.value = '';
-        namaBarangMasuk.focus();
     }
     function resetFormKeluar() {
         const today = new Date().toISOString().slice(0,10);
@@ -737,7 +915,6 @@
         satuanKeluar.value = '';
         jumlahKeluar.value = '1';
         picKeluar.value = '';
-        namaBarangKeluar.focus();
     }
 
     function showToast(msg, type) {
@@ -757,7 +934,6 @@
         setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2000);
     }
 
-    // Export Excel
     function exportToExcel() {
         const summary = getStockSummary();
         let excelHtml = `<html><head><meta charset="UTF-8"><title>Laporan Stok</title></head><body>
@@ -772,7 +948,7 @@
         transactions.forEach(t => {
             excelHtml += `<tr><td>${t.tanggal}</td><td>${t.tipe.toUpperCase()}</td><td>${t.barang}</td><td>${t.jumlah}</td><td>${t.satuan}</td><td>${t.pic}</td></tr>`;
         });
-        excelHtml += `</tbody></table></body></html>`;
+        excelHtml += `</tbody><tr></body></html>`;
         const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
