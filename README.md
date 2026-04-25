@@ -389,7 +389,7 @@
         <div class="summary-table-wrapper">
             <table class="summary-table">
                 <thead><tr><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Tersedia</th><th>Satuan</th></tr></thead>
-                <tbody id="summaryStockBody"><tr><td colspan="5">Belum ada数据</td></tr></tbody>
+                <tbody id="summaryStockBody"><tr><td colspan="5">Belum ada data</td></tr></tbody>
             </table>
         </div>
     </div>
